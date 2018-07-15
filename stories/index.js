@@ -1,38 +1,34 @@
 import React from 'react';
-import { storiesOf, action } from '@kadira/storybook';
-import Cards, { Card } from '../src/index'
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import { Card, CardDeck } from '../src/index'
 import './style.css'
 
-const data = ['Alexandre', 'Thomas', 'Lucien']
-
-const CustomAlertLeft = () => <span>Nop</span>
-const CustomAlertRight = () => <span>Ok</span>
+const data = ['Alexandre', 'Thomas', 'Lucien', 'Dwight', 'Mark', 'Jim', 'Pam', 'Jo', 'James', 'Angela', 'Harry']
 
 storiesOf('Tinder card', module)
   .add('simple', () => (
     <div>
       <h1>react swipe card</h1>
-      <Cards onEnd={action('end')} className='master-root'>
-        {data.map((item, key) => 
-          <Card 
+      <CardDeck onEnd={action('end')} className='master-root'>
+        {data.map((item, key) =>
+          <Card
             key={key}
-            onSwipeLeft={action('swipe left')} 
+            onSwipeLeft={action('swipe left')}
             onSwipeRight={action('swipe right')}>
             <h2>{item}</h2>
           </Card>
         )}
-      </Cards>
+      </CardDeck>
     </div>
   ))
   .add('custom alert', () => (
     <div>
       <h1>react swipe card</h1>
-      <Cards
-        alertRight={<CustomAlertRight />} 
-        alertLeft={<CustomAlertLeft />} 
+      <CardDeck
         onEnd={action('end')}
         className='master-root'>
-        {data.map((item, key) => 
+        {data.map((item, key) =>
           <Card
               key={key}
               onSwipeLeft={action('swipe left')}
@@ -40,23 +36,23 @@ storiesOf('Tinder card', module)
             <h2>{item}</h2>
           </Card>
         )}
-      </Cards>
+      </CardDeck>
     </div>
   ))
   .add('all swipe directions', () => (
     <div>
       <h1>react swipe card</h1>
-      <Cards onEnd={action('end')} className='master-root'>
-        {data.map((item, key) => 
-          <Card 
+      <CardDeck onEnd={action('end')} className='master-root'>
+        {data.map((item, key) =>
+          <Card
             key={key}
-            onSwipeTop={action('swipe top')} 
+            onSwipeTop={action('swipe top')}
             onSwipeBottom={action('swipe bottom')}
-            onSwipeLeft={action('swipe left')} 
+            onSwipeLeft={action('swipe left')}
             onSwipeRight={action('swipe right')}>
             <h2>{item}</h2>
           </Card>
         )}
-      </Cards>
+      </CardDeck>
     </div>
   ))
