@@ -18,4 +18,7 @@ export interface CardRendererProps {
 
 export type CardRenderProp = (props: CardRendererProps) => React.ReactNode;
 
-export type StyleTransformer = (currentPosition: Position, initialPosition: Position) => React.CSSProperties;
+export type StyleTransformer = (
+  currentPosition: Position,
+  initialPosition: Position,
+) => React.CSSProperties;

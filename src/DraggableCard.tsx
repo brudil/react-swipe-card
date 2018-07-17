@@ -3,7 +3,12 @@ import Hammer from 'hammerjs';
 import ReactDOM from 'react-dom';
 import { SimpleCard } from './SimpleCard';
 import { Direction } from './utils';
-import { Position, CardOutActions, CardRenderProp, StyleTransformer } from './types';
+import {
+  Position,
+  CardOutActions,
+  CardRenderProp,
+  StyleTransformer,
+} from './types';
 
 export interface DraggableCardProps extends CardOutActions {
   index: number;

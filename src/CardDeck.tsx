@@ -83,7 +83,11 @@ export class CardDeck extends React.Component<CardDeckProps, CardDeckState> {
         active: index === currentIndex,
       };
       return [
-        createElement(CardPassthrough, { ...props, ...currentCard.props, styleTransformer: styleTransformer || defaultStyleTransformer }),
+        createElement(CardPassthrough, {
+          ...props,
+          ...currentCard.props,
+          styleTransformer: styleTransformer || defaultStyleTransformer,
+        }),
         ...acculated,
       ];
     }, []);

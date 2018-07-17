@@ -47,9 +47,7 @@ export class SimpleCard extends React.Component<
   }
 
   render() {
-    const {
-      initialPosition,
-    } = this.state;
+    const { initialPosition } = this.state;
     const { styleTransformer, shouldTransition, isPristine } = this.props;
     var style = {
       ...styleTransformer(initialPosition, initialPosition),
@@ -60,7 +58,8 @@ export class SimpleCard extends React.Component<
     return this.props.render({
       style,
       shouldTransition: shouldTransition ? true : false,
-      isPristine: (isPristine === undefined || isPristine === true) ? true : false,
+      isPristine:
+        isPristine === undefined || isPristine === true ? true : false,
     });
   }
 }
