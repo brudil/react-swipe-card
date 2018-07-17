@@ -9,3 +9,13 @@ export interface CardOutActions {
   onOutScreenBottom: (index: number) => void;
   onOutScreenTop: (index: number) => void;
 }
+
+export interface CardRendererProps {
+  style: any;
+  isPristine: boolean;
+  shouldTransition: boolean;
+}
+
+export type CardRenderProp = (props: CardRendererProps) => React.ReactNode;
+
+export type StyleTransformer = (currentPosition: Position, initialPosition: Position) => React.CSSProperties;

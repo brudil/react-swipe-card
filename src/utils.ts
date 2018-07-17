@@ -1,6 +1,6 @@
 import { Position } from './types';
 
-export const translate3d = (pos: Position, initialPos: Position) => {
+export const defaultStyleTransformer = (pos: Position, initialPos: Position) => {
   const rotate = (initialPos.x !== 0 || initialPos.y !== 0) ? `rotate(${(initialPos.x - pos.x) * 0.1 * -1}deg)` : '';
   const translate3d = `translate3d(${pos.x}px, ${pos.y}px, 0px)`
   const translate = `${translate3d} ${rotate}`;

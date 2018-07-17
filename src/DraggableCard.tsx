@@ -2,8 +2,8 @@ import React from 'react';
 import Hammer from 'hammerjs';
 import ReactDOM from 'react-dom';
 import { SimpleCard } from './SimpleCard';
-import { translate3d, Direction } from './utils';
-import { Position, CardOutActions } from './types';
+import { Direction } from './utils';
+import { Position, CardOutActions, CardRenderProp, StyleTransformer } from './types';
 
 export interface DraggableCardProps extends CardOutActions {
   index: number;
@@ -13,6 +13,9 @@ export interface DraggableCardProps extends CardOutActions {
   onSwipeLeft?: () => void;
   onSwipeBottom?: () => void;
   onSwipeTop?: () => void;
+
+  styleTransformer: StyleTransformer;
+  render: CardRenderProp;
 }
 
 interface DraggableCardState {
@@ -198,12 +201,13 @@ export class DraggableCard extends React.Component<
 
   render() {
     const { x, y, animation, pristine, startPosition } = this.state;
-    const style = translate3d({ x, y }, startPosition);
+    const style = this.props.styleTransformer({ x, y }, startPosition);
     return (
       <SimpleCard
         {...this.props}
         style={style}
-        className={animation ? 'animate' : pristine ? 'inactive' : ''}
+        shouldTransition={!!animation}
+        isPristine={pristine}
       />
     );
   }

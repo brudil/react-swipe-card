@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Position } from './types';
-import { translate3d } from './utils';
+import { Position, CardRenderProp, StyleTransformer } from './types';
 
 export interface SimpleCardProps {
   containerSize: Position;
   className?: string;
   index: number;
   style?: React.CSSProperties;
+  render: CardRenderProp;
+  styleTransformer: StyleTransformer;
+  shouldTransition?: boolean;
+  isPristine?: boolean;
 }
 
 interface SimpleCardState {
@@ -47,17 +50,17 @@ export class SimpleCard extends React.Component<
     const {
       initialPosition,
     } = this.state;
-    const { className = 'inactive' } = this.props;
+    const { styleTransformer, shouldTransition, isPristine } = this.props;
     var style = {
-      ...translate3d(initialPosition, initialPosition),
+      ...styleTransformer(initialPosition, initialPosition),
       zIndex: this.props.index,
       ...this.props.style,
     };
 
-    return (
-      <div style={style} className={`card ${className}`}>
-        {this.props.children}
-      </div>
-    );
+    return this.props.render({
+      style,
+      shouldTransition: shouldTransition ? true : false,
+      isPristine: (isPristine === undefined || isPristine === true) ? true : false,
+    });
   }
 }

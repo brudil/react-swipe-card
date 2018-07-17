@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions';
 import { Card, CardDeck } from '../src/index'
 import './style.css'
 
-const data = ['Alexandre', 'Thomas', 'Lucien', 'Dwight', 'Mark', 'Jim', 'Pam', 'Jo', 'James', 'Angela', 'Harry']
+const data = ['Poppy', 'James', 'Jo', 'Frida', 'Jamie', 'Jess', 'Anndrea']
 
 storiesOf('Tinder card', module)
   .add('simple', () => (
@@ -15,27 +15,14 @@ storiesOf('Tinder card', module)
           <Card
             key={key}
             onSwipeLeft={action('swipe left')}
-            onSwipeRight={action('swipe right')}>
-            <h2>{item}</h2>
-          </Card>
-        )}
-      </CardDeck>
-    </div>
-  ))
-  .add('custom alert', () => (
-    <div>
-      <h1>react swipe card</h1>
-      <CardDeck
-        onEnd={action('end')}
-        className='master-root'>
-        {data.map((item, key) =>
-          <Card
-              key={key}
-              onSwipeLeft={action('swipe left')}
-              onSwipeRight={action('swipe right')}>
-            <h2>{item}</h2>
-          </Card>
-        )}
+            onSwipeRight={action('swipe right')}
+            render={({ style, isPristine, shouldTransition }) => (
+              <div style={style} className={`card ${shouldTransition ? 'animate' : isPristine ? 'inactive' : ''}`}>
+                <h2>{item}</h2>
+              </div>
+            )}
+            />
+          )}
       </CardDeck>
     </div>
   ))
@@ -46,12 +33,16 @@ storiesOf('Tinder card', module)
         {data.map((item, key) =>
           <Card
             key={key}
+            onSwipeLeft={action('swipe left')}
+            onSwipeRight={action('swipe right')}
             onSwipeTop={action('swipe top')}
             onSwipeBottom={action('swipe bottom')}
-            onSwipeLeft={action('swipe left')}
-            onSwipeRight={action('swipe right')}>
-            <h2>{item}</h2>
-          </Card>
+            render={({ style, isPristine, shouldTransition }) => (
+              <div style={style} className={`card ${shouldTransition ? 'animate' : isPristine ? 'inactive' : ''}`}>
+                <h2>{item}</h2>
+              </div>
+            )}
+          />
         )}
       </CardDeck>
     </div>

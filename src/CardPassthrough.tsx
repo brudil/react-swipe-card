@@ -2,9 +2,11 @@ import React, { createElement } from 'react';
 
 import { SimpleCard, SimpleCardProps } from './SimpleCard';
 import { DraggableCard, DraggableCardProps } from './DraggableCard';
+import { StyleTransformer } from './types';
 
 interface Props {
   active?: boolean;
+  styleTransformer: StyleTransformer;
 }
 
 type CardPassthroughProps = Props & SimpleCardProps & DraggableCardProps;

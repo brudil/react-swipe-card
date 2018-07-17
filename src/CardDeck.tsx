@@ -1,7 +1,7 @@
 import React, { createElement } from 'react';
 import ReactDOM from 'react-dom';
-import { Position } from './types';
-import { Direction } from './utils';
+import { Position, StyleTransformer } from './types';
+import { Direction, defaultStyleTransformer } from './utils';
 import { CardProps } from './Card';
 import { CardPassthrough } from './CardPassthrough';
 
@@ -9,6 +9,7 @@ interface CardDeckProps {
   onEnd?(): void;
   className?: string;
   children: React.ReactElement<CardProps>[];
+  styleTransformer?: StyleTransformer;
 }
 
 interface CardDeckState {
@@ -63,7 +64,7 @@ export class CardDeck extends React.Component<CardDeckProps, CardDeckState> {
 
   render() {
     const { index, containerSize } = this.state;
-    const { children, className } = this.props;
+    const { children, className, styleTransformer } = this.props;
     console.log({ children, containerSize });
     if (!Array.isArray(children) || !containerSize.x || !containerSize.y) {
       return <div className={className} />;
@@ -82,7 +83,7 @@ export class CardDeck extends React.Component<CardDeckProps, CardDeckState> {
         active: index === currentIndex,
       };
       return [
-        createElement(CardPassthrough, { ...props, ...currentCard.props }),
+        createElement(CardPassthrough, { ...props, ...currentCard.props, styleTransformer: styleTransformer || defaultStyleTransformer }),
         ...acculated,
       ];
     }, []);
