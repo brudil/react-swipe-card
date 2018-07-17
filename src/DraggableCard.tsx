@@ -30,6 +30,7 @@ interface DraggableCardState {
   startPosition: Position;
   animation: null | boolean;
   pristine: boolean;
+  activatedDirection?: Direction;
 }
 
 export class DraggableCard extends React.Component<
@@ -47,6 +48,7 @@ export class DraggableCard extends React.Component<
       startPosition: { x: 0, y: 0 },
       animation: null,
       pristine: true,
+      activatedDirection: undefined,
     };
     this.resetPosition = this.resetPosition.bind(this);
     this.handlePan = this.handlePan.bind(this);
@@ -68,7 +70,24 @@ export class DraggableCard extends React.Component<
       startPosition: { x: 0, y: 0 },
     });
   }
+  getDirection() {
+    const screen = this.props.containerSize;
+    const card = ReactDOM.findDOMNode(this) as HTMLDivElement;
+    const THRESHOLD = 50
 
+    switch (true) {
+      case this.state.x < -THRESHOLD:
+        return Direction.Left;
+      case this.state.x + (card.offsetWidth - THRESHOLD) > screen.x:
+        return Direction.Right;
+      case this.state.y < -THRESHOLD:
+        return Direction.Top;
+      case this.state.y + (card.offsetHeight - THRESHOLD) > screen.y:
+        return Direction.Bottom;
+      default:
+        return false;
+    }
+  };
   panstart() {
     const { x, y } = this.state;
     this.setState({
@@ -79,25 +98,8 @@ export class DraggableCard extends React.Component<
   }
 
   panend(ev: HammerInput) {
-    const screen = this.props.containerSize;
-    const card = ReactDOM.findDOMNode(this) as HTMLDivElement;
+    const direction = this.getDirection();
 
-    const getDirection = () => {
-      switch (true) {
-        case this.state.x < -50:
-          return Direction.Left;
-        case this.state.x + (card.offsetWidth - 50) > screen.x:
-          return Direction.Right;
-        case this.state.y < -50:
-          return Direction.Top;
-        case this.state.y + (card.offsetHeight - 50) > screen.y:
-          return Direction.Bottom;
-        default:
-          return false;
-      }
-    };
-
-    const direction = getDirection();
     console.log('direction via', direction);
 
     const {
@@ -152,7 +154,14 @@ export class DraggableCard extends React.Component<
   }
 
   panmove(ev: HammerInput) {
-    this.setState(this.calculatePosition(ev.deltaX, ev.deltaY));
+    const direction = this.getDirection();
+    this.setState({ activatedDirection: direction === false ? undefined : direction })
+
+    this.setState(({ initialPosition: { x, y }}) => ({
+      x: ev.deltaX + x,
+      y: ev.deltaY + y,
+      activatedDirection: direction || undefined
+    }));
   }
 
   pancancel(ev: HammerInput) {
@@ -167,16 +176,6 @@ export class DraggableCard extends React.Component<
 
   handleSwipe(ev: HammerInput) {
     console.log(ev.type);
-  }
-
-  calculatePosition(deltaX: number, deltaY: number) {
-    const {
-      initialPosition: { x, y },
-    } = this.state;
-    return {
-      x: x + deltaX,
-      y: y + deltaY,
-    };
   }
 
   componentDidMount() {
@@ -205,7 +204,7 @@ export class DraggableCard extends React.Component<
   }
 
   render() {
-    const { x, y, animation, pristine, startPosition } = this.state;
+    const { x, y, animation, pristine, startPosition, activatedDirection } = this.state;
     const style = this.props.styleTransformer({ x, y }, startPosition);
     return (
       <SimpleCard
@@ -213,6 +212,7 @@ export class DraggableCard extends React.Component<
         style={style}
         shouldTransition={!!animation}
         isPristine={pristine}
+        activatedDirection={activatedDirection}
       />
     );
   }

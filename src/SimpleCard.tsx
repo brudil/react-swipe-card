@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Position, CardRenderProp, StyleTransformer } from './types';
+import { Direction } from './utils';
 
 export interface SimpleCardProps {
   containerSize: Position;
@@ -11,6 +12,7 @@ export interface SimpleCardProps {
   styleTransformer: StyleTransformer;
   shouldTransition?: boolean;
   isPristine?: boolean;
+  activatedDirection?: Direction
 }
 
 interface SimpleCardState {
@@ -51,13 +53,14 @@ export class SimpleCard extends React.Component<
     const { styleTransformer, shouldTransition, isPristine } = this.props;
     var style = {
       ...styleTransformer(initialPosition, initialPosition),
-      zIndex: this.props.index,
+      zIndex: 10 - this.props.index,
       ...this.props.style,
     };
 
     return this.props.render({
       style,
       shouldTransition: shouldTransition ? true : false,
+      activatedDirection: this.props.activatedDirection,
       isPristine:
         isPristine === undefined || isPristine === true ? true : false,
     });

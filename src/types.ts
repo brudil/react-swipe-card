@@ -1,3 +1,5 @@
+import { Direction } from './utils';
+
 export interface Position {
   x: number;
   y: number;
@@ -19,6 +21,7 @@ export interface CardRendererProps {
   style: any;
   isPristine: boolean;
   shouldTransition: boolean;
+  activatedDirection?: Direction;
 }
 
 export type CardRenderProp = (props: CardRendererProps) => React.ReactNode;
