@@ -2,6 +2,7 @@ import React from 'react';
 import { CardRenderProp } from './types';
 
 export interface CardProps {
+  id: number;
   className?: string;
   onSwipeLeft?(): void;
   onSwipeRight?(): void;

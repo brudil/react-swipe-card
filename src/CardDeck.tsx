@@ -1,6 +1,6 @@
-import React, { createElement } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { Position, StyleTransformer } from './types';
+import { Position, StyleTransformer, RenderContainerProps } from './types';
 import { Direction, defaultStyleTransformer } from './utils';
 import { CardProps } from './Card';
 import { CardPassthrough } from './CardPassthrough';
@@ -10,6 +10,7 @@ interface CardDeckProps {
   className?: string;
   children: React.ReactElement<CardProps>[];
   styleTransformer?: StyleTransformer;
+  renderContainer(props: RenderContainerProps): React.ReactNode;
 }
 
 interface CardDeckState {
@@ -64,40 +65,29 @@ export class CardDeck extends React.Component<CardDeckProps, CardDeckState> {
 
   render() {
     const { index, containerSize } = this.state;
-    const { children, className, styleTransformer } = this.props;
-    console.log({ children, containerSize });
+    const { children, styleTransformer, renderContainer } = this.props;
+
     if (!Array.isArray(children) || !containerSize.x || !containerSize.y) {
-      return <div className={className} />;
+      return renderContainer({ isEmpty: true, children: null });
     }
 
-    const _cards = children.reduce((acculated, currentCard, currentIndex) => {
-      if (index > currentIndex) return acculated;
-      const props = {
-        key: currentIndex,
-        containerSize,
-        index: children.length - index,
-        onOutScreenTop: () => this.handleRemoveCard(Direction.Top),
-        onOutScreenBottom: () => this.handleRemoveCard(Direction.Bottom),
-        onOutScreenLeft: () => this.handleRemoveCard(Direction.Left),
-        onOutScreenRight: () => this.handleRemoveCard(Direction.Right),
-        active: index === currentIndex,
-      };
-      return [
-        createElement(CardPassthrough, {
-          ...props,
-          ...currentCard.props,
-          styleTransformer: styleTransformer || defaultStyleTransformer,
-        }),
-        ...acculated,
-      ];
-    }, []);
+    const _cards = (children as React.ReactElement<CardProps>[])
+      .slice(index, index + 2)
+      .map((card: React.ReactElement<CardProps>, index: number) => (
+        <CardPassthrough
+          key={card.props.id}
+          containerSize={containerSize}
+          index={card.props.id}
+          onOutScreenTop={() => this.handleRemoveCard(Direction.Top)}
+          onOutScreenBottom={() => this.handleRemoveCard(Direction.Bottom)}
+          onOutScreenLeft={() => this.handleRemoveCard(Direction.Left)}
+          onOutScreenRight={() => this.handleRemoveCard(Direction.Right)}
+          active={index === 0}
+          styleTransformer={styleTransformer || defaultStyleTransformer}
+          {...card.props}
+        />
+      ));
 
-    console.log(_cards);
-
-    return (
-      <div className={className}>
-        <div id="cards">{_cards}</div>
-      </div>
-    );
+    return renderContainer({ isEmpty: _cards.length > 0, children: _cards });
   }
 }

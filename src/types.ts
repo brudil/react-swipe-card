@@ -10,6 +10,11 @@ export interface CardOutActions {
   onOutScreenTop: (index: number) => void;
 }
 
+export interface RenderContainerProps {
+  children: any;
+  isEmpty: boolean;
+}
+
 export interface CardRendererProps {
   style: any;
   isPristine: boolean;
